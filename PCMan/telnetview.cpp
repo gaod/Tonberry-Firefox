@@ -1216,7 +1216,7 @@ void CTelnetView::OnMouseMove(UINT flags, POINTS& pt)
 	if( !m_pTermData )
 		return;
 
-	PostMessage( GetParent(m_hWnd), WM_MOUSEMOVE, 0, MAKELPARAM(pt.x,pt.y) ); /*Workaround*/
+//	PostMessage( GetParent(m_hWnd), WM_MOUSEMOVE, 0, MAKELPARAM(pt.x,pt.y) ); /*Workaround*/   !!!new: this crashes our Firefox 3.6!!!
 
 	int x = pt.x;
 	int y = pt.y;
