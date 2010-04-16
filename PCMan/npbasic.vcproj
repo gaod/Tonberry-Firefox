@@ -354,28 +354,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="nsScriptablePeer.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="plugin.cpp"
 				>
 				<FileConfiguration
@@ -588,14 +566,6 @@
 			</File>
 			<File
 				RelativePath="MouseGestures.h"
-				>
-			</File>
-			<File
-				RelativePath="nsIPCMan.h"
-				>
-			</File>
-			<File
-				RelativePath="nsScriptablePeer.h"
 				>
 			</File>
 			<File
