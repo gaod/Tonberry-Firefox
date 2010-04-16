@@ -39,15 +39,18 @@
 #define __PLUGIN_H__
 
 #include "pluginbase.h"
-#include "nsScriptablePeer.h"
 #include "site.h"
 
 class CTelnetView;
+class CPCManScriptable;
 class nsPluginInstance : public nsPluginInstanceBase
 {
 public:
   nsPluginInstance(nsPluginCreateData* aCreateDataStruct);
   ~nsPluginInstance();
+
+  CPCManScriptable* m_pPCManScriptable;
+  CPCManScriptable* getScriptableObject();
 
   NPBool init(NPWindow* aWindow);
   void shut();
@@ -55,6 +58,7 @@ public:
 
   // locals
   const char * getVersion();
+  //NPP getInstance(){	return mInstance; }
 
   static string unicodeToAnsi( const wchar_t *unistr );
   CTelnetView* m_pView;
@@ -67,8 +71,8 @@ public:
   // scriptable
   void focus();
   void connect( const char* url );
-  void setFontFace(const wchar_t *name);
-  void setFontFaceEn(const wchar_t *name);
+  void setFontFace(const char* name);
+  void setFontFaceEn(const char* name);
   void setFontSize(short size);
   void setAntiIdle( long idleTime, const char* idleString );
   void setEscape(const char *esc);
@@ -84,12 +88,14 @@ public:
   void setMouseOverEffect( int value );
   long getHWND();
 
-  nsScriptablePeer* getScriptablePeer();
-
   WNDPROC m_OldWndProc;
+
+protected:
+	void CreateScriptableObject();
+
+
 private:
   bool securityCheckOK;
-  nsScriptablePeer * mScriptablePeer;
   NPP mInstance;
   NPBool mInitialized;
   HWND mhWnd;

@@ -32,7 +32,6 @@
 #include <malloc.h>
 
 #include "npapi.h"
-#include "nsScriptablePeer.h"
 #include "plugin.h"
 
 using namespace std;

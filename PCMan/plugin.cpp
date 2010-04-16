@@ -53,6 +53,7 @@
 //  #include <mbstring.h>
 
 #include "plugin.h"
+#include "ScriptableObject.h"
 #include "nsIServiceManager.h"
 #include "nsISupportsUtils.h" // some usefule macros are defined here
 #include "telnetview.h"
@@ -97,11 +98,11 @@ void NS_DestroyPluginInstance(nsPluginInstanceBase * aPlugin)
 //
 nsPluginInstance::nsPluginInstance(nsPluginCreateData* aCreateDataStruct) : nsPluginInstanceBase(),
   mInstance(aCreateDataStruct->instance),
-  mInitialized(FALSE),
-  mScriptablePeer(NULL)
+  mInitialized(FALSE)
 {
   mhWnd = NULL;
   m_pView = NULL;
+  m_pPCManScriptable = NULL;
 
   m_Site.m_ColsPerPage = 80;
   m_Site.m_RowsPerPage = 24;
@@ -119,10 +120,10 @@ nsPluginInstance::nsPluginInstance(nsPluginCreateData* aCreateDataStruct) : nsPl
 
 nsPluginInstance::~nsPluginInstance()
 {
-//  if(m_FilePath)
-//    delete []m_FilePath;
-  mScriptablePeer->SetInstance(NULL);
-  NS_IF_RELEASE(mScriptablePeer);
+	if(m_pPCManScriptable)
+	{
+		NPN_ReleaseObject(m_pPCManScriptable);
+	}
 }
 
 static LRESULT CALLBACK PluginWinProc(HWND, UINT, WPARAM, LPARAM);
@@ -176,6 +177,7 @@ NPBool nsPluginInstance::init(NPWindow* aWindow)
   RECT rc;
   GetClientRect( mhWnd, &rc );
   MoveWindow( m_pView->m_hWnd, 0, 0, rc.right, rc.bottom, TRUE );
+  this->connect("ptt.cc"); // for TEST
 
   mInitialized = TRUE;
 
@@ -237,54 +239,67 @@ string nsPluginInstance::unicodeToAnsi( const wchar_t *unistr )
 // ! Scriptability related code !
 // ==============================
 //
-// here the plugin is asked by Mozilla to tell if it is scriptable
-// we should return a valid interface id and a pointer to 
-// nsScriptablePeer interface which we should have implemented
-// and which should be defined in the corressponding *.xpt file
-// in the bin/components folder
+//
+
+void nsPluginInstance::CreateScriptableObject()
+{
+	NPObject *so = NPN_CreateObject(mInstance, &CPCManScriptable::MyClass);
+	m_pPCManScriptable = (CPCManScriptable *) so;
+
+	// We retain it until we are released ourselves.
+	NPN_RetainObject(so);
+}
+
 NPError  nsPluginInstance::GetValue(NPPVariable aVariable, void *aValue)
 {
-  NPError rv = NPERR_NO_ERROR;
+	switch(aVariable) {
+	default:
+		return NPERR_GENERIC_ERROR;
+	case NPPVpluginNameString:
+		*((char **)aValue) = "Tonberry";
+		break;
+	case NPPVpluginDescriptionString:
+		*((char **)aValue) = "Tonberry plugin.";
+		break;
+	case NPPVpluginScriptableNPObject:
+        {
+			NPObject *so = (NPObject *) m_pPCManScriptable;
 
-  if (aVariable == NPPVpluginScriptableInstance) {
-    // addref happens in getter, so we don't addref here
-    nsIPCMan * scriptablePeer = getScriptablePeer();
-    if (scriptablePeer) {
-      *(nsISupports **)aValue = scriptablePeer;
-    } else
-      rv = NPERR_OUT_OF_MEMORY_ERROR;
-  }
-  else if (aVariable == NPPVpluginScriptableIID) {
-    static nsIID scriptableIID = NS_IPCMAN_IID;
-    nsIID* ptr = (nsIID *)NPN_MemAlloc(sizeof(nsIID));
-    if (ptr) {
-        *ptr = scriptableIID;
-        *(nsIID **)aValue = ptr;
-    } else
-      rv = NPERR_OUT_OF_MEMORY_ERROR;
-  }
+			if(!so)
+			{
+				CreateScriptableObject();
+				so = (NPObject *) m_pPCManScriptable;
+			}
 
-  return rv;
+			if(so)
+			{
+				NPN_RetainObject(so);
+			}
+
+			*(NPObject **)aValue = so;
+        }
+		break;
+#if defined(XULRUNNER_SDK)
+	case NPPVpluginNeedsXEmbed:
+		*((PRBool *)value) = PR_FALSE;
+		break;
+#endif
+	}
+	return NPERR_NO_ERROR;
 }
 
 // ==============================
 // ! Scriptability related code !
 // ==============================
 //
-// this method will return the scriptable object (and create it if necessary)
-nsScriptablePeer* nsPluginInstance::getScriptablePeer()
+//
+CPCManScriptable* nsPluginInstance::getScriptableObject()
 {
-  if (!mScriptablePeer) {
-    mScriptablePeer = new nsScriptablePeer(this);
-    if(!mScriptablePeer)
-      return NULL;
-
-    NS_ADDREF(mScriptablePeer);
-  }
-
-  // add reference for the caller requesting the object
-  NS_ADDREF(mScriptablePeer);
-  return mScriptablePeer;
+	if(!m_pPCManScriptable)
+	{
+		CreateScriptableObject();
+	}
+	return m_pPCManScriptable;
 }
 
 // scriptable
@@ -297,16 +312,16 @@ void nsPluginInstance::connect( const char* url )
     m_pView->NewCon( m_Site );
 }
 
-void nsPluginInstance::setFontFace(const wchar_t *name)
+void nsPluginInstance::setFontFace(const char* name)
 {
-  m_Site.m_FontFace = unicodeToAnsi( name );
+  //m_Site.m_FontFace = unicodeToAnsi( name );
   if (m_pView && m_pView->m_hWnd)
     m_pView->setFontFace( m_Site.m_FontFace.c_str() );
 }
 
-void nsPluginInstance::setFontFaceEn(const wchar_t *name)
+void nsPluginInstance::setFontFaceEn(const char* name)
 {
-  m_Site.m_FontFaceEn = unicodeToAnsi( name );
+  //m_Site.m_FontFaceEn = unicodeToAnsi( name );
   if (m_pView && m_pView->m_hWnd)
     m_pView->setFontFaceEn( m_Site.m_FontFaceEn.c_str() );
 }
