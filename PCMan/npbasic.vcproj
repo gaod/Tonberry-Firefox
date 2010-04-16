@@ -376,6 +376,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ScriptableObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath="site.cpp"
 				>
 				<FileConfiguration
@@ -574,6 +578,10 @@
 			</File>
 			<File
 				RelativePath="resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ScriptableObject.h"
 				>
 			</File>
 			<File
