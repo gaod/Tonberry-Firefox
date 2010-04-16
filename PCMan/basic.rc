@@ -1,0 +1,285 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winresrc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (Taiwan) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
+#pragma code_page(950)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_POPUP MENU DISCARDABLE 
+BEGIN
+    POPUP "POPUP"
+    BEGIN
+        MENUITEM "&Copy Selected Text",         ID_COPY
+        MENUITEM "Copy Text with &ANSI Color",  ID_COPYANSI
+        MENUITEM "Copy and Pa&ste",             ID_COPYPASTE
+        MENUITEM "&Paste",                      ID_PASTE
+        MENUITEM "Select A&ll",                 ID_SELECTALL
+        MENUITEM SEPARATOR
+        MENUITEM "Copy Lin&k Location",         ID_COPYLINK
+        MENUITEM "&Open with Search Engine",    ID_OPENSEARCH1
+        MENUITEM "Open &with other Web services", ID_OPENSEARCH2
+        MENUITEM SEPARATOR
+        MENUITEM "&Use Mouse Browsing",         ID_USE_MOUSE_BROWSING
+        MENUITEM "Use &Drag and Drop Gestures", ID_USE_TEXT_DRAG_DROP
+        MENUITEM "&Tab Switching or Page Up/dn", ID_SWITH_KEY_FUNC
+    END
+END
+
+IDR_POPUP_NONSEL MENU DISCARDABLE 
+BEGIN
+    POPUP "POPUP"
+    BEGIN
+        MENUITEM "&Paste",                      ID_PASTE
+        MENUITEM "Select A&ll",                 ID_SELECTALL
+        MENUITEM SEPARATOR
+        MENUITEM "Copy Lin&k Location",         ID_COPYLINK
+        MENUITEM SEPARATOR
+        MENUITEM "&Use Mouse Browsing",         ID_USE_MOUSE_BROWSING
+        MENUITEM "Use &Drag and Drop Gestures", ID_USE_TEXT_DRAG_DROP
+        MENUITEM "&Tab Switching or Page Up/dn", ID_SWITH_KEY_FUNC
+        POPUP "Encoding..."
+        BEGIN
+            MENUITEM "System Default",              ID_SET_ENCODING_DEFAULT
+            MENUITEM SEPARATOR
+            MENUITEM "Traditional Chinese (Big5)",  ID_SET_ENCODING_CP950
+            MENUITEM "Simplified Chinese (GB2312)", ID_SET_ENCODING_CP936
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "About PCMan Plugin...",       ID_ABOUT
+    END
+END
+
+IDR_POPUP_CHT MENU DISCARDABLE 
+BEGIN
+    POPUP "POPUP"
+    BEGIN
+        MENUITEM "複製 (只有純文字) (&C)",      ID_COPY
+        MENUITEM "複製 (包含ANSI彩色) (&A)",    ID_COPYANSI
+        MENUITEM "複製並貼上 (&S)",             ID_COPYPASTE
+        MENUITEM "貼上 (&P)",                   ID_PASTE
+        MENUITEM "全選 (&L)",                   ID_SELECTALL
+        MENUITEM SEPARATOR
+        MENUITEM "複製鏈結位址 (&K)",           ID_COPYLINK
+        MENUITEM "以搜尋引擎開啟 (&O)",         ID_OPENSEARCH1
+        MENUITEM "以其它服務開啟 (&W)",         ID_OPENSEARCH2
+        MENUITEM SEPARATOR
+        MENUITEM "啟用滑鼠瀏覽 (&U)",           ID_USE_MOUSE_BROWSING
+        MENUITEM "啟用文字超級拖放 (&D)",       ID_USE_TEXT_DRAG_DROP
+        MENUITEM "分頁切換或翻頁 (&T)",         ID_SWITH_KEY_FUNC
+    END
+END
+
+IDR_POPUP_NONSEL_CHT MENU DISCARDABLE 
+BEGIN
+    POPUP "POPUP"
+    BEGIN
+        MENUITEM "貼上 (&P)",                   ID_PASTE
+        MENUITEM "全選 (&L)",                   ID_SELECTALL
+        MENUITEM SEPARATOR
+        MENUITEM "複製鏈結位址 (&K)",           ID_COPYLINK
+        MENUITEM SEPARATOR
+        MENUITEM "啟用滑鼠瀏覽 (&U)",           ID_USE_MOUSE_BROWSING
+        MENUITEM "啟用文字超級拖放 (&D)",       ID_USE_TEXT_DRAG_DROP
+        MENUITEM "分頁切換或翻頁 (&T)",         ID_SWITH_KEY_FUNC
+        POPUP "字元編碼..."
+        BEGIN
+            MENUITEM "系統預設",                    ID_SET_ENCODING_DEFAULT
+            MENUITEM SEPARATOR
+            MENUITEM "Traditional Chinese (Big5)",  ID_SET_ENCODING_CP950
+            MENUITEM "Simplified Chinese (GB2312)", ID_SET_ENCODING_CP936
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "關於 PCMan Plugin...",        ID_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOGEX 0, 0, 222, 115
+STYLE DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "About PCMan plugin for Mozilla/Firefox"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "確定",IDOK,154,94,50,14
+    CTEXT           "PCMan plugin for Mozilla/Firefox\n\nGive your Mozilla/Firefox the power to browse BBS sites.\n\nDeveloped by Hong Jen Yee (洪任諭).\n\npcman.tw@gmail.com\n\nPCMan's Homepage: http://pcman.sayya.org/\n\n",
+                    IDC_STATIC,7,7,208,58
+    CTEXT           "",IDC_STATIC_MSG,45,71,143,15,SS_CENTERIMAGE,
+                    WS_EX_STATICEDGE
+    PUSHBUTTON      "前往下載",IDC_BUTTON1,101,94,50,14,NOT WS_VISIBLE | 
+                    WS_DISABLED
+    ICON            "",IDC_STATIC_ICON,18,66,20,20
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO MOVEABLE PURE 
+BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 215
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 108
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_DRAGTEXT            CURSOR  DISCARDABLE     "res\\dragtext_cur.cur"
+IDC_EXIT                CURSOR  DISCARDABLE     "res\\exit.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON    DISCARDABLE     "res\\pcmanx.ico"
+IDI_ICON2               ICON    DISCARDABLE     "res\\upg.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_APP_VERSION         "2.3.12"
+END
+
+#endif    // Chinese (Taiwan) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,5,0
+ PRODUCTVERSION 1,0,5,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", " \0"
+            VALUE "FileDescription", "PCMan\0"
+            VALUE "FileExtents", "nppcman\0"
+            VALUE "FileOpenName", "nppcman\0"
+            VALUE "FileVersion", "1, 0, 5, 0\0"
+            VALUE "InternalName", "PCMan.embed\0"
+            VALUE "LegalCopyright", "Copyright (C) 2005\0"
+            VALUE "LegalTrademarks", "Developed by Hong Jen Yee\0"
+            VALUE "MIMEType", "application/pcman\0"
+            VALUE "OriginalFilename", "nppcman.dll\0"
+            VALUE "ProductName", "PCMan BBS Plugin for Mozilla\0"
+            VALUE "ProductVersion", "1, 0, 5, 0\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+#endif    // !_MAC
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "#include ""winresrc.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

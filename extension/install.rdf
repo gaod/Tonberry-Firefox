@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+	<Description about="urn:mozilla:install-manifest">
+		<!-- core data -->
+		<em:id>{cf8492cb-39ca-4bd5-81f3-a94a871cb37a}</em:id>
+		<em:version>2.3.12</em:version>
+
+		<!-- target: Mozilla, version 1.0 to 1.8 -->
+		<em:targetApplication>
+			<Description>
+				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+				<em:minVersion>1.0</em:minVersion>
+				<em:maxVersion>3.1.*</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+			
+		<!-- front-end metadata -->
+		<em:name>PCMan Plug-in 2009 !</em:name>
+		<em:description>A telnet BBS plug-in for Mozilla Firefox.</em:description>
+		<em:creator>PCMan (Original), neopro (current)</em:creator>
+		<em:contributor>筆筆 (修正了分頁標籤圖示)</em:contributor>
+		<em:contributor>Emfox (滑鼠點擊瀏覽功能, PCMan X project.)</em:contributor>
+		<em:iconURL>chrome://pcman/skin/images/logo.png</em:iconURL>
+		<em:homepageURL>http://pcmanfx.openfoundry.org/</em:homepageURL>
+		<em:optionsURL>chrome://pcman/content/options.xul</em:optionsURL>
+		<!-- package files -->
+		<em:file>
+			<Description about="urn:mozilla:extension:file:pcman.jar">
+				<em:package>content/pcman/</em:package>
+				<em:skin>skin/classic/pcman/</em:skin>
+			</Description>
+		</em:file>
+	</Description>
+</RDF>

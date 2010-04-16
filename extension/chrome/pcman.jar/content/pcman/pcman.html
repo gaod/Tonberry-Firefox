@@ -1,0 +1,276 @@
+﻿<!--
+  This file is part of PCMan plug-in for Mozilla/Firefox.
+  Author: Hong Jen Yee (PCMan)
+  License: GNU General Public License
+-->
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PCMan</title>
+<link rel="icon" href="chrome://pcman/content/pcman.png">
+
+<script language="javascript">
+	var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+							.getService(Components.interfaces.nsIPrefService)
+								.getBranch("extensions.pcman.options.");
+								
+
+var self_hwnd = 0;
+var connection_intervalId = 0;
+var MyStatusText="";
+
+
+	var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+		.getService(Components.interfaces.nsIWindowMediator);
+	var wnd = wm.getMostRecentWindow("navigator:browser");
+	var topBrowser = wnd.getBrowser();
+	
+	var sound = Components.classes["@mozilla.org/sound;1"]
+		.getService(Components.interfaces.nsISound);
+	
+	
+	if ( prefs.getBoolPref('DoNotUseScrollbar') )
+		window.scrollbars.visible = false;
+	else
+		window.scrollbars.visible = true;
+
+
+var connectionCounter = {
+	_times : 0,
+	
+	get times(){
+		return this._times;
+	},
+	
+	reset : function(){
+		this._times = 0;
+	},
+		
+	do : function(){
+		this._times++;		
+	}
+};
+var counter = connectionCounter;
+
+
+var observer = new function(){
+        var observerService;
+        
+        this.init = function(){
+                observerService =
+                	Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
+                this.register();
+        };
+        this.destroy = function(){                
+                this.unregister();
+                observerService = null;
+        };
+        
+        this.observe = function(subject, topic, data)
+        {
+                if (topic == "onLoadNewTab")
+                {               
+                	if ( data == window.self_hwnd )
+                	{       
+                		//alert(self_hwnd + ": " + data);              	
+                		var obj = subject.QueryInterface(Components.interfaces.nsISupportsCString);                		
+                		topBrowser.loadOneTab( obj.data, null, null, null, false, false );                		
+                	}                               
+                }
+                if (topic == "onLoadNewTabBk")
+                {               
+                	if ( data == window.self_hwnd )
+                	{                      	
+                		var obj = subject.QueryInterface(Components.interfaces.nsISupportsCString);                		
+                		topBrowser.loadOneTab( obj.data, null, null, null, true, false );
+                	}                               
+                }
+                if (topic == "pm_connection_close")
+                {               
+                	if ( data == window.self_hwnd )
+                	{                      	                		               		
+                		var text = document.location.host + " - 連線已經中斷";
+                		document.title = text;                		
+                		window.stopUpdateStatus();                		
+                		                		
+                		var browserEnumerator = window.wm.getEnumerator("navigator:browser");
+                		// Check each browser instance
+  				while (browserEnumerator.hasMoreElements())
+  				{
+    					var tabbrowser = browserEnumerator.getNext().getBrowser();
+
+    					// Check each tab of this browser instance
+    					var numTabs = tabbrowser.browsers.length;
+    					for(var index=0; index<numTabs; index++) 
+    					{
+    						var currentTab = tabbrowser.mTabs[index]; 
+      						if ( currentTab.label == text ){      							
+      							currentTab.setAttribute( "image", "chrome://pcman/content/pcman_gray.png" );
+      						}
+    					}
+  				}
+                		
+                	}                               
+                }
+                if (topic == "pm_telnet_receive_BEL")
+                {               
+                	if ( data == window.self_hwnd )
+                	{     
+                		//FIXME: var option = prefs.getIntPref('...');
+                		/*var option = 1;
+                		                		
+                		switch(option)
+                		{
+                		case 0:
+                			break;                			
+                		case 1:
+                			window.sound.beep();
+                			break;                			                			
+                		}*/                		                		
+                	}                               
+                }                
+        };
+        
+        this.register = function(){
+                observerService.addObserver(this, "onLoadNewTab", false);
+                observerService.addObserver(this, "onLoadNewTabBk", false);
+                observerService.addObserver(this, "pm_connection_close", false);
+                observerService.addObserver(this, "pm_telnet_receive_BEL", false);
+        };
+        this.unregister = function(){
+                observerService.removeObserver(this, "onLoadNewTab");
+                observerService.removeObserver(this, "onLoadNewTabBk");
+                observerService.removeObserver(this, "pm_connection_close");
+                observerService.removeObserver(this, "pm_telnet_receive_BEL");
+        };
+};
+//netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+observer.init(); 
+
+
+
+function connectHost() {
+  var bbsURL = document.location.host;
+
+  if(bbsURL!=null && bbsURL!=""){
+    document.title = bbsURL;
+    var term = document.getElementById("Term");
+    if( term ) {
+      term.setFontFace(unescape(prefs.getCharPref('FontFace.string')));
+      term.setFontFaceEn(unescape(prefs.getCharPref('FontFaceEn.string')));
+      term.setEscape(unescape(prefs.getCharPref('Escape.string')));
+      term.setAntiIdle(prefs.getIntPref('AntiIdle.seconds'), unescape(prefs.getCharPref('AntiIdle.string')));
+      
+	  if(prefs.getBoolPref('bbsbox.fixed')){
+	  term.width = prefs.getIntPref('bbsbox.width');
+	  term.height = prefs.getIntPref('bbsbox.height');
+	  }
+	  if(prefs.getBoolPref('ask')){
+		window.onbeforeunload=function(){
+		return 'PCMan : ' + document.title;
+	  }
+
+	  }	  	  
+	  var a=0, b=0, c=0, value=0;
+	  if(prefs.getBoolPref('AutoDbcsDetection.backspace'))
+	  	a = 0x8;
+	  if(prefs.getBoolPref('AutoDbcsDetection.delete'))
+	  	b = 0x4;
+	  if(prefs.getBoolPref('AutoDbcsDetection.arrow'))
+	  	c = 0x2;
+	  value = ~(a | b | c);
+	  term.setAutoDbcsDetection(value);
+	  
+	  term.setSearchEngineData( unescape(prefs.getCharPref('SearchEngine1.url')), unescape(prefs.getCharPref('SearchEngine1.paramname')), 0 );
+	  term.setSearchEngineData( unescape(prefs.getCharPref('SearchEngine2.url')), unescape(prefs.getCharPref('SearchEngine2.paramname')), 1 );
+	  term.setUseMouseBrowsing( prefs.getBoolPref('UseMouseBrowsing') );
+	  term.setUseTextDragDrop( prefs.getBoolPref('UseTextDragDrop') ); 
+	  term.setLoadUrlInBackGround( prefs.getBoolPref('LoadUrlInBackGround') ); 
+	  term.setGesturesSensitivityX( prefs.getIntPref('Gestures.SensitivityX') );
+	  term.setGesturesUseXAxisOnly( prefs.getBoolPref('Gestures.UseXAxisOnly') ); 
+	  term.setUseHelperWnd( prefs.getBoolPref('UseHelperWnd') ); 
+	  term.setUseMouseWheelHack( prefs.getBoolPref('UseMouseWheelHack') );
+	  term.setMouseOverEffect( prefs.getIntPref('MouseOverEffect') );
+	  
+      term.connect( bbsURL );
+      window.self_hwnd = term.getHWND();
+      
+      if(prefs.getBoolPref('ShowConnectionTimer'))
+      		restartUpdateStatus();
+    }
+  }
+}
+
+function setFocus(){
+    window.setMyStatus();
+    var term = document.getElementById("Term");
+    if( term )
+      term.focus();
+}
+
+var setStatus = function(text){
+	if(arguments.length==0)
+		window.defaultStatus = window.MyStatusText;
+	else
+		window.defaultStatus = text;	
+}
+var setMyStatus = setStatus;
+
+
+var clearStatus = function(event){
+	var _browser = topBrowser.selectedTab.linkedBrowser;
+	_browser.contentWindow.defaultStatus ="";
+}
+
+function onUpdateStatus(){
+	var t=counter.times;
+	var h=0, m=0, s=0;	
+	
+	h = t/3600;
+	m= (t%3600)/60;
+	s=  t%60;
+	
+	window.MyStatusText = "[連線時間: " + Math.floor(h) + " 小時 " + Math.floor(m) + " 分 " + Math.floor(s) + " 秒]"
+	window.setMyStatus(); 
+	counter.do();
+}
+
+function restartUpdateStatus(){
+	stopUpdateStatus();
+	window.connection_intervalId = setInterval("onUpdateStatus()",1000);
+}
+
+function stopUpdateStatus(){
+	clearInterval( window.connection_intervalId );
+	counter.reset();
+}
+
+
+function onClose(){
+	clearStatus();
+}
+
+function onUnload(){
+	topBrowser.tabContainer.removeEventListener("TabSelect", clearStatus, false);
+	observer.destroy();
+	stopUpdateStatus();
+	if (prefs.getBoolPref('DoNotUseScrollbar')) {window.scrollbars.visible = true;}
+}
+
+
+topBrowser.tabContainer.addEventListener("TabSelect", clearStatus, false);
+</script>
+</head>
+
+<body style="margin:0; padding:0;"
+  onload="connectHost(); setFocus();"
+  onunload="onUnload();"
+  onbeforeunload="onClose();"
+  onFocus="setFocus();"
+  bgcolor="#000000">
+<center>
+<embed id="Term" type="application/pcman" width="100%" height="100%" / >
+</center>
+</body>
+</html>

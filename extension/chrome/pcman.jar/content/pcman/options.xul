@@ -1,0 +1,149 @@
+﻿<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://pcman/content/options.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		id="pcmanOption"
+		minwidth="400"
+		onload="load()"
+		ondialogaccept="save();"
+		buttons="accept, cancel"
+		title="PCMan 選項"
+		>
+
+  <tabbox>
+	    <tabs>
+	        <tab label="一般"/>
+	        <tab label="進階"/>
+	        <tab label="滑鼠"/>
+	    </tabs>	    
+    <tabpanels>	 	    	
+	
+      <tabpanel>
+       <vbox flex="2">
+  	<groupbox>
+		<checkbox id="bbsbox.fixed" label="固定畫面大小 (字體大小不隨著視窗大小自動調整)" />
+		<hbox>
+		<description>BBS畫面大小：</description><textbox id="bbsbox.width" size="3" /><description>x</description><textbox id="bbsbox.height" size="3" />
+		</hbox>
+	</groupbox>
+	
+	<groupbox>
+		<caption label="自動偵測雙位元組字集文字"/>
+			<hbox>
+				<checkbox id="AutoDbcsDetection.backspace" label="Backspace 鍵偵測中文" />
+				<checkbox id="AutoDbcsDetection.delete" label="Delete 鍵偵測中文" />
+				<checkbox id="AutoDbcsDetection.arrow" label="方向鍵偵測中文" />
+			</hbox>
+	</groupbox>
+	
+	<groupbox>
+		<caption label="內建搜尋引擎設定"/>
+	<hbox>
+		<label control="SearchEngine1.url" value="第一組(常用) Url："/>
+		<textbox id="SearchEngine1.url" />
+		<label control="SearchEngine1.paramname" value="Parameter Name："/>
+		<textbox id="SearchEngine1.paramname" />
+	</hbox>	
+	<hbox>
+		<label control="SearchEngine2.url" value="第二組(其他) Url："/>
+		<textbox id="SearchEngine2.url" />
+		<label control="SearchEngine2.paramname" value="Parameter Name："/>
+		<textbox id="SearchEngine2.paramname" />
+	</hbox>		
+	</groupbox>
+		
+	<vbox flex="2">
+			<hbox>
+				<label control="FontFace.string" value="字型："/>
+				<textbox id="FontFace.string" />
+				<label control="FontFaceEn.string" value="英數字型 (進階使用者)："/>
+				<textbox id="FontFaceEn.string" />
+			</hbox>
+	</vbox>		
+       </vbox>
+      </tabpanel>	
+
+      <tabpanel>
+       <vbox>
+	<groupbox>
+		<caption label="其它設定"/>
+			<hbox>
+				<checkbox id="ask" label="關閉BBS連線畫面時若還在連線中要詢問" />			
+			</hbox>
+		
+			<hbox>
+				<checkbox id="UseMouseWheelHack" label="啟用滑鼠滾輪修正 (在 Fx2.0 上面建議停用它)" />
+			</hbox>
+	</groupbox>		
+
+	<groupbox>
+		<caption label="點擊鏈結"/>
+			<hbox>		
+				<checkbox id="LoadUrlInBackGround" label="BBS畫面點擊鏈結後不要自動跳到新的分頁" />
+			</hbox>				
+	</groupbox>
+	
+	<groupbox>
+		<caption label="檢視"/>
+			<hbox>		
+				<checkbox id="ShowConnectionTimer" label="狀態列顯示連線時間" />
+				<checkbox id="DoNotUseScrollbar" label="不要顯示捲軸" />
+			</hbox>				
+	</groupbox>
+	
+	<hbox>
+		<description>若閒置</description><textbox id="AntiIdle.seconds" size="3" /><description>秒後送出下列字串</description><textbox id="AntiIdle.string" />
+	</hbox>
+	<hbox>
+		<description>貼上彩色文字把ESC轉換成</description>
+		<menulist editable="true" id="Escape.string">
+			<menupopup>
+				<menuitem label="^["/>
+				<menuitem label="^[^["/>
+				<menuitem label="^C^H^H"/>
+				<menuitem label="^U"/>
+			</menupopup>
+		</menulist>
+		<description>大多數站台用^U或^C^H^H</description>
+	</hbox>
+       </vbox>
+      </tabpanel>
+      
+      <tabpanel>
+       <vbox>
+	<groupbox>
+		<caption label="滑鼠功能"/>
+			<hbox>
+				<checkbox id="UseMouseBrowsing" label="預設使用滑鼠瀏覽" />
+				<checkbox id="UseTextDragDrop" label="預設使用文字超級拖放" />
+				<checkbox id="UseHelperWnd" label="預設使用小幫手工具列" />
+			</hbox>
+			
+			<hbox>
+				<checkbox id="Gestures.UseXAxisOnly" label="禁用Y軸方向的滑鼠手勢 (不建議)" />					
+			</hbox>
+			
+			<hbox align="center">
+				<label control="Gestures.SensitivityX" value="設定滑鼠手勢靈敏度(最高=0)："/>
+				<textbox id="Gestures.SensitivityX" />
+			</hbox>			
+	</groupbox>
+	<hbox>
+		<description>滑鼠移過時的特殊效果:</description>
+		<menulist editable="false" id="MouseOverEffect">
+			<menupopup>
+				<menuitem label="不使用" value="0"/>
+				<menuitem label="區塊光棒效果" value="1"/>
+				<menuitem label="前景高亮度加上底線" value="2"/>
+				<menuitem label="反白效果" value="3"/>
+			</menupopup>
+		</menulist>
+	</hbox>
+       </vbox>
+      </tabpanel>
+      
+    </tabpanels>
+  </tabbox>    
+
+	<script src="chrome://pcman/content/options.js" />
+</dialog>
